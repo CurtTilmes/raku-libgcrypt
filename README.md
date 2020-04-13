@@ -1,5 +1,7 @@
 # Raku Gcrypt - Bindings for GNU Libgcrypt
 
+[![Build Status](https://travis-ci.org/CurtTilmes/raku-libgcrypt.svg)](https://travis-ci.org/CurtTilmes/raku-libgcrypt)
+
 * [Introduction](#introduction)
 * [Message Digest (Hash)](#message-digest-hash)
 * [Symmetric cryptography ciphers](#symmetric-cryptography-ciphers)
