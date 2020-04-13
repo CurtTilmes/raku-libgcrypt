@@ -40,7 +40,10 @@ class X::Gcrypt is Exception
 
 class X::Gcrypt::BadVersion is X::Gcrypt
 {
-    method message() { 'Incompatible libgcrypt version' }
+    method message()
+    {
+        'Incompatible libgcrypt version: ' ~ gcry_check_version(Str)
+    }
 }
 
 class X::Gcrypt::NoHandle is X::Gcrypt
