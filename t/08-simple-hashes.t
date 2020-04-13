@@ -1,10 +1,7 @@
 #!/usr/bin/env raku
 
 use Test;
-use Gcrypt;
 use Gcrypt::Simple :ALL;
-
-Gcrypt.init(version => '1.7.6');
 
 my @hashes =
     &MD5 => '9e107d9d372bb6826bd81d3542a419d6',

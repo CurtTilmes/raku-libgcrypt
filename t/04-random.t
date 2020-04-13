@@ -1,10 +1,7 @@
 #!/usr/bin/env raku
 
 use Test;
-use Gcrypt;
 use Gcrypt::Random;
-
-Gcrypt.init(version => '1.7.6');
 
 plan 10;
 

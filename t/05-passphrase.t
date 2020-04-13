@@ -1,10 +1,7 @@
 #!/usr/bin/env raku
 
 use Test;
-use Gcrypt;
 use Gcrypt::Passphrase;
-
-Gcrypt.init(version => '1.7.6');
 
 my $passphrase = "This is a long and complicated passphrase.";
 

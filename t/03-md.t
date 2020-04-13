@@ -1,10 +1,7 @@
 #!/usr/bin/env raku
 
 use Test;
-use Gcrypt;
 use Gcrypt::Hash;
-
-my $GCRYPT-VERSION = Gcrypt.init(version => '1.7.6');
 
 my $text = 'The quick brown fox jumps over the lazy dog';
 

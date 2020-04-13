@@ -1,10 +1,7 @@
 #!/usr/bin/env raku
 
 use Test;
-use Gcrypt;
 use Gcrypt::Simple :ALL;
-
-Gcrypt.init(version => '1.7.6');
 
 my @macs =
     &HMAC_SHA256 => 'a4392b158d5af57dfe160ce616a175a0e1c22fd8cf548a4f34fa225dfc44ae3a',

@@ -179,19 +179,16 @@ See [Key Derivation](https://gnupg.org/documentation/manuals/gcrypt/Key-Derivati
 
 # libgcrypt versions/features
 
-By default, this module verifies that the library is a very late
-version to enable all the features that are implemented here.
+By default, this module does not verify the library version.
 
-If you have an older version installed, the initialization will fail
-with an `X::Gcrypt::BadVersion` exception.
-
-If you know what you are doing and promise to only use features that
-you know that your library is capable of performing, you can supply
-an older version to the initialization.
+If you have an older version installed, some features implemented here
+may not be available with your library.  You can verify that a late enough
+version of the library is installed by manually initializing the library
+with a specific version:
 
 ```
 use Gcrypt;
-Gcrypt.init(version => '1.7.6');
+Gcrypt.init(version => '1.8.1');
 ```
 
 Gcrypt.init() also returns the actual version of the libarary, so you

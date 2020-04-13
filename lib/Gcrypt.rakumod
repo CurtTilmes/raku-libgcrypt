@@ -82,11 +82,14 @@ class X::Gcrypt::ExtendedOutput is X::Gcrypt
 
 class Gcrypt
 {
-    method init(Str :$version = '1.7.6', Int :$secmem --> Str:D)
+    method init(Str :$version, Int :$secmem --> Str:D)
     {
         return if gcry_control0(GCRYCTL_INITIALIZATION_FINISHED_P);
 
-        die X::Gcrypt::BadVersion.new unless gcry_check_version($version);
+        with $version
+        {
+            die X::Gcrypt::BadVersion.new unless gcry_check_version($version);
+        }
 
         if $secmem
         {
@@ -129,3 +132,52 @@ class Gcrypt
         $.check: gcry_control2($cmd, $arg2)
     }
 }
+
+=begin pod
+
+=head1 NAME
+
+Gcrypt
+
+=head1 SYNOPSIS
+
+  use Gcrypt;
+  Gcrypt.init;
+  say Gcrypt.init(version => '1.7.5');
+
+  say Gcrypt.config;
+  Gcrypt.control $cmd, ...);
+
+=head1 DESCRIPTION
+
+Top-level module for Gcrypt, bindings to the [GNU libgcrypt](https://gnupg.org/software/libgcrypt) library.
+
+It defines some exceptions and wraps some top-level routines for
+initialization, configuration, and control
+
+Generally you want to use one of the other C<Gcrypt::*> modules instead of this.
+
+=head2 class B<Gcrypt>
+
+=item method B<init>(Str :$version, Int :$secmem --> Str:D)
+
+Initializes the I<libgcrypt> library, If a specific version is
+specified, a C<X::Gcrypt::BadVersion> will be thrown if the installed
+library is older than the specified version.  The version string
+is also returned.
+
+If this is called after initialization has already occured, it just returns.
+
+=item method B<config>(Str $what?)
+
+Returns some configuration information.
+
+=item method B<control>(Gcrypt::Command:D $cmd)
+
+Used to control some aspects of the library.
+
+=item method B<check>(Int $code)
+
+Throws an exception on anything but 0, used to check library returns.
+
+=end pod
