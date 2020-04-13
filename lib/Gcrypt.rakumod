@@ -82,7 +82,7 @@ class X::Gcrypt::ExtendedOutput is X::Gcrypt
 
 class Gcrypt
 {
-    method init(Str :$version = '1.8.1', Int :$secmem --> Str:D)
+    method init(Str :$version = '1.7.6', Int :$secmem --> Str:D)
     {
         return if gcry_control0(GCRYCTL_INITIALIZATION_FINISHED_P);
 
