@@ -8,7 +8,7 @@
     "description"    : "Raku Bindings for GNU libgcrypt",
     "license"        : "Artistic-2.0",
     "build-depends"  : [ ],
-    "test-depends"   : [ "Test", "Test::When", "Test::META" ],
+    "test-depends"   : [ "Test", "Test::When" ],
     "depends"        : [ "NativeCall", "NativeLibs" ],
     "authors"        : [ "Curt Tilmes <curt@tilmes.org>" ],
     "provides"       : {

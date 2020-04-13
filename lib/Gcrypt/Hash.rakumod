@@ -21,6 +21,19 @@ sub gcry_md_open(Gcrypt::HashHandle $handle is rw, int32 $algo, uint32 $flags
 sub gcry_md_algo_name(int32 --> Str)
     is native(LIBGCRYPT) {}
 
+sub gcry_md_algo_info(int32 $algo, int32 $what, Pointer, Pointer --> int32)
+    is native(LIBGCRYPT) {}
+
+multi method available(Str:D $algorithm --> Bool)
+{
+    samewith gcry_md_map_name($algorithm)
+}
+
+multi method available(Int:D $algorithm --> Bool)
+{
+    gcry_md_algo_info($algorithm, GCRYCTL_TEST_ALGO, Pointer, Pointer) == 0
+}
+
 sub gcry_md_copy(Gcrypt::HashHandle $handle is rw, Gcrypt::HashHandle --> int32)
     is native(LIBGCRYPT) {}
 

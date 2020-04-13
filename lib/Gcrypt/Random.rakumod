@@ -13,6 +13,7 @@ multi random(Int:D $numbytes, |opts) is export
 multi random(Buf:D $buf,
                 Bool :$weak, Bool :$strong, Bool :$very-strong) is export
 {
+    Gcrypt.init;
     gcry_randomize($buf, $buf.bytes,
                    $weak ?? GCRY_WEAK_RANDOM
                          !! $very-strong ?? GCRY_VERY_STRONG_RANDOM
@@ -30,6 +31,7 @@ multi nonce(Int:D $numbytes) is export
 
 multi nonce(Buf:D $buf --> Buf) is export
 {
+    Gcrypt.init;
     gcry_create_nonce($buf, $buf.bytes);
     $buf
 }

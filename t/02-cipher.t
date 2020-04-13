@@ -1,13 +1,17 @@
 #!/usr/bin/env raku
 
 use Test;
+use Gcrypt;
 use Gcrypt::Constants;
 use Gcrypt::Cipher;
+
+Gcrypt.init(version => '1.7.6');
 
 my $plaintext = 'The quick brown fox jumps over the lazy dog';
 my $key = 'this4_#xxyh%%3hasd';
 
 plan Gcrypt::Ciphers.enums.elems;
+
 
 for Gcrypt::Ciphers.enums.kv -> $name, $algorithm
 {

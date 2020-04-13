@@ -189,8 +189,12 @@ an older version to the initialization.
 
 ```
 use Gcrypt;
-Gcrypt.init(version => '1.5');
+Gcrypt.init(version => '1.7.6');
 ```
+
+Gcrypt.init() also returns the actual version of the libarary, so you
+can use it, for example, to pick the algorithm to use based on the
+version.
 
 # Multi-threading
 
@@ -210,7 +214,12 @@ the exception's integer `code` safely.
 
 ## Installation
 
-For ubuntu, get libgcrypt20
+Many distributions already have libgcrypt installed, but if not, get it
+first:
+* For debian or ubuntu: `apt install libgcrypt20`
+* For alpine: `apk add libgcrypt`
+
+Then `zef install Gcrypt`.
 
 ## License
 

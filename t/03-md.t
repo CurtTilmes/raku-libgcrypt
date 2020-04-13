@@ -1,7 +1,10 @@
 #!/usr/bin/env raku
 
 use Test;
+use Gcrypt;
 use Gcrypt::Hash;
+
+my $GCRYPT-VERSION = Gcrypt.init(version => '1.7.6');
 
 my $text = 'The quick brown fox jumps over the lazy dog';
 
@@ -48,12 +51,19 @@ for @hashes -> (:key($algorithm), :value($hash))
     {
         plan 3;
 
-        isa-ok my $obj = Gcrypt::Hash.new(:$algorithm),
-            'Gcrypt::Hash', "Create Object for $obj.name()";
+        if Gcrypt::Hash.available($algorithm)
+        {
+            isa-ok my $obj = Gcrypt::Hash.new(:$algorithm),
+                'Gcrypt::Hash', "Create Object for $obj.name()";
 
-        isa-ok $obj.write($text), 'Gcrypt::Hash', "Write text $obj.name()";
+            isa-ok $obj.write($text), 'Gcrypt::Hash', "Write text $obj.name()";
 
-        is $obj.hex(32), $hash, "Check hash $obj.name()";
+            is $obj.hex(32), $hash, "Check hash $obj.name()";
+        }
+        else
+        {
+            skip('Old version of libgcrypt, skip BLAKE algorithms', 3);
+        }
     }
 }
 

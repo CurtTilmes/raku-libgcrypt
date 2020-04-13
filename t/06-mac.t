@@ -1,7 +1,10 @@
 #!/usr/bin/env raku
 
 use Test;
+use Gcrypt;
 use Gcrypt::MAC;
+
+Gcrypt.init(version => '1.7.6');
 
 my $text = 'The quick brown fox jumps over the lazy dog';
 my $key = 'this4_#xxyh%%3hasd';
