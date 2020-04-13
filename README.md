@@ -179,21 +179,21 @@ See [Key Derivation](https://gnupg.org/documentation/manuals/gcrypt/Key-Derivati
 
 # libgcrypt versions/features
 
-By default, this module does not verify the library version.
-
-If you have an older version installed, some features implemented here
-may not be available with your library.  You can verify that a late enough
-version of the library is installed by manually initializing the library
-with a specific version:
+You can check the version by calling `Gcrypt.version` which returns
+the version as a string:
 
 ```
 use Gcrypt;
-Gcrypt.init(version => '1.8.1');
+say Gcrypt.version;   # '1.7.6beta' or '1.8.1' or whatever
 ```
 
-Gcrypt.init() also returns the actual version of the libarary, so you
-can use it, for example, to pick the algorithm to use based on the
-version.
+You can query the library for its capabilities with `Gcrypt.config`:
+
+```
+use Gcrypt;
+say Gcrypt.config;               # Get all configuration
+say Gcrypt.config('ciphers');    # List available ciphers
+say Gcrypt.config('digests');    # List available digests
 
 # Multi-threading
 

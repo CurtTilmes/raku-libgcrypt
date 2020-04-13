@@ -14,8 +14,6 @@ sub key-from-passphrase(Any:D $passphrase is copy,
                         Int:D :$iterations = 1,
                         Any:D :$salt is copy = buf8.new) is export
 {
-    Gcrypt.init;
-
     if $passphrase ~~ Str
     {
         $passphrase = $passphrase.encode

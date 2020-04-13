@@ -39,8 +39,6 @@ multi submethod BUILD(Int:D :$!algorithm,
                       :$iv,
                       Bool :$secure)
 {
-    Gcrypt.init;
-
     if gcry_mac_algo_info($!algorithm, GCRYCTL_TEST_ALGO, Pointer, Pointer)
         != 0
     {

@@ -51,8 +51,6 @@ multi submethod BUILD(Int:D :$algorithm,
                       Bool :$hmac,
                       Bool :$bugemu1)
 {
-    Gcrypt.init;
-
     my uint32 $flags = ($secure  ?? GCRY_MD_FLAG_SECURE  !! 0)
                     +| ($hmac    ?? GCRY_MD_FLAG_HMAC    !! 0)
                     +| ($bugemu1 ?? GCRY_MD_FLAG_BUGEMU1 !! 0);

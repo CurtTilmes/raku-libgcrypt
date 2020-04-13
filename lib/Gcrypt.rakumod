@@ -82,34 +82,12 @@ class X::Gcrypt::ExtendedOutput is X::Gcrypt
 
 class Gcrypt
 {
-    method init(Str :$version, Int :$secmem --> Str:D)
-    {
-        return if gcry_control0(GCRYCTL_INITIALIZATION_FINISHED_P);
-
-        with $version
-        {
-            die X::Gcrypt::BadVersion.new unless gcry_check_version($version);
-        }
-
-        if $secmem
-        {
-            $.control: GCRYCTL_SUSPEND_SECMEM_WARN;
-            $.control: GCRYCTL_INIT_SECMEM, $secmem;
-            $.control: GCRYCTL_RESUME_SECMEM_WARN;
-        }
-        else
-        {
-            $.control: GCRYCTL_DISABLE_SECMEM;
-        }
-
-        $.control: GCRYCTL_INITIALIZATION_FINISHED;
-        return gcry_check_version(Str)
-    }
+    method version(--> Str:D) { gcry_check_version(Str) }
 
     multi method check(0) { 0 }
     multi method check($code) { die X::Gcrypt.new(:$code) }
 
-    method config(Str $what?)
+    method config(Str $what? --> Str:D)
     {
         my $ptr = gcry_get_config(0, $what) // die X::Gcrypt.new;
         my $str = nativecast(Str, $ptr);
@@ -133,48 +111,55 @@ class Gcrypt
     }
 }
 
+INIT
+{
+    Gcrypt.version;
+    Gcrypt.control: GCRYCTL_DISABLE_SECMEM, 0;
+    Gcrypt.control: GCRYCTL_INITIALIZATION_FINISHED, 0;
+}
+
 =begin pod
 
 =head1 NAME
 
-Gcrypt
+Gcrypt - Raku bindings for GNU libgrypt
 
 =head1 SYNOPSIS
 
   use Gcrypt;
-  Gcrypt.init;
-  say Gcrypt.init(version => '1.7.5');
+  say Gcrypt.version;             # String like '1.7.6beta' or '1.8.1' ...
+  say Gcrypt.config;              # Text dump of config information
+  say Gcrypt.config('ciphers');   # Just ciphers
+  say Gcrypt.config('digests');   # Just digests, ...
 
-  say Gcrypt.config;
-  Gcrypt.control $cmd, ...);
+  Gcrypt.control($cmd, ...);      # Various control stuff you don't need
+  Gcrypt.check(...);              # Error check internal libgcrypt call
 
 =head1 DESCRIPTION
 
-Top-level module for Gcrypt, bindings to the [GNU libgcrypt](https://gnupg.org/software/libgcrypt) library.
+Top-level module for Gcrypt, bindings to the [GNU libgcrypt](
+https://gnupg.org/software/libgcrypt) library.
 
 It defines some exceptions and wraps some top-level routines for
-initialization, configuration, and control
+initialization, configuration, and control.
 
-Generally you want to use one of the other C<Gcrypt::*> modules instead of this.
+Generally you want to use one of the other C<Gcrypt::*> modules
+instead of this.
 
-=head2 class B<Gcrypt>
+=head2 METHODS
 
-=item method B<init>(Str :$version, Int :$secmem --> Str:D)
+=item method B<version>(Str :$version, Int :$secmem --> Str:D)
 
-Initializes the I<libgcrypt> library, If a specific version is
-specified, a C<X::Gcrypt::BadVersion> will be thrown if the installed
-library is older than the specified version.  The version string
-is also returned.
-
-If this is called after initialization has already occured, it just returns.
+Returns the version string for the library.
 
 =item method B<config>(Str $what?)
 
-Returns some configuration information.
+Returns some configuration information.  $what can be 'ciphers',
+'digests', or other configuration items listed in config.
 
-=item method B<control>(Gcrypt::Command:D $cmd)
+=item method B<control>(Gcrypt::Command:D $cmd, ...)
 
-Used to control some aspects of the library.
+Used to control some internal aspects of the library.
 
 =item method B<check>(Int $code)
 
