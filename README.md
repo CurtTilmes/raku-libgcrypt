@@ -197,15 +197,7 @@ say Gcrypt.config('digests');    # List available digests
 
 # Multi-threading
 
-Make sure the library is initialized prior to creating any threads you
-will be accessing it in.
-
-You can do this by doing any `Gcrypt` action, or just manually calling
-init:
-```
-use Gcrypt;
-Gcrypt.init;
-```
+Most Gcrypt actions are thread-safe.
 
 The error strings use a static memory buffer, so make sure only one
 thread is printing out an `Exception` message at a time.  You can use
