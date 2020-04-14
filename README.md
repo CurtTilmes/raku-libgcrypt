@@ -177,7 +177,7 @@ $key = key-from-passphrase($passphrase,
 ```
 See [Key Derivation](https://gnupg.org/documentation/manuals/gcrypt/Key-Derivation.html) for more information.
 
-x# libgcrypt versions/features
+# libgcrypt versions/features
 
 You can check the version by calling `Gcrypt.version` which returns
 the version as a string:
