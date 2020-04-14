@@ -194,6 +194,7 @@ use Gcrypt;
 say Gcrypt.config;               # Get all configuration
 say Gcrypt.config('ciphers');    # List available ciphers
 say Gcrypt.config('digests');    # List available digests
+```
 
 # Multi-threading
 
