@@ -177,7 +177,7 @@ $key = key-from-passphrase($passphrase,
 ```
 See [Key Derivation](https://gnupg.org/documentation/manuals/gcrypt/Key-Derivation.html) for more information.
 
-# libgcrypt versions/features
+x# libgcrypt versions/features
 
 You can check the version by calling `Gcrypt.version` which returns
 the version as a string:
@@ -204,7 +204,7 @@ The error strings use a static memory buffer, so make sure only one
 thread is printing out an `Exception` message at a time.  You can use
 the exception's integer `code` safely.
 
-## Installation
+# Installation
 
 Many distributions already have libgcrypt installed, but if not, get it
 first:
@@ -213,7 +213,7 @@ first:
 
 Then `zef install Gcrypt`.
 
-## License
+# License
 
 This work is subject to the Artistic License 2.0.
 
