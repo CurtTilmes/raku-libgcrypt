@@ -211,7 +211,7 @@ first:
 * For debian or ubuntu: `apt install libgcrypt20`
 * For alpine: `apk add libgcrypt`
 
-Then `zef install Gcrypt`.
+Then `zef install Gcrypt`
 
 # License
 
