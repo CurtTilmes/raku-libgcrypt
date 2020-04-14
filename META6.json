@@ -3,7 +3,7 @@
     "perl"           : "6.*",
     "name"           : "Gcrypt",
     "api"            : "1",
-    "version"        : "0.5",
+    "version"        : "0.6",
     "auth"           : "github:CurtTilmes",
     "description"    : "Raku Bindings for GNU libgcrypt",
     "license"        : "Artistic-2.0",

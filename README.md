@@ -196,6 +196,8 @@ say Gcrypt.config('ciphers');    # List available ciphers
 say Gcrypt.config('digests');    # List available digests
 ```
 
+NOTE: `config` has a known problem on CentOS and is likely not to work.
+
 # Multi-threading
 
 Most Gcrypt actions are thread-safe.

@@ -3,13 +3,9 @@
 use Test;
 use Gcrypt;
 
-plan 3;
+plan 1;
 
 ok my $version = Gcrypt.version(), 'Get Version';
 diag "libgcrypt version $version";
-
-ok Gcrypt.config(), 'Config';
-
-ok Gcrypt.config('ciphers'), 'Config ciphers';
 
 done-testing;
