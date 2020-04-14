@@ -1,5 +1,5 @@
 use NativeCall;
-use NativeLibs;
+use NativeLibs:ver<0.0.7>:auth<github:salortiz>;
 use Gcrypt::Constants;
 
 sub LIBGCRYPT is export
@@ -11,9 +11,6 @@ sub LIBGCRYPT is export
 }
 
 sub gcry_check_version(Str $req_version --> Str) is native(LIBGCRYPT) {}
-
-sub gcry_get_config(int32, Str --> Pointer)
-    is native(LIBGCRYPT) {}
 
 sub gcry_free(Pointer)
     is native(LIBGCRYPT) {}
@@ -87,12 +84,19 @@ class Gcrypt
     multi method check(0) { 0 }
     multi method check($code) { die X::Gcrypt.new(:$code) }
 
+    sub gcry_get_config(int32, Str --> Pointer)
+    is native(LIBGCRYPT) {}
+
     method config(Str $what? --> Str:D)
     {
-        my $ptr = gcry_get_config(0, $what) // die X::Gcrypt.new;
-        my $str = nativecast(Str, $ptr);
-        gcry_free($ptr);
-        $str
+        try  # Intermittent return of garbage characters that break utf-8
+        {
+            my $ptr = gcry_get_config(0, $what) // die;
+            my $str = nativecast(Str, $ptr);
+            gcry_free($ptr);
+            return $str
+        }
+        return "Unknown configuration" if $!;
     }
 
     multi method control(Gcrypt::Command:D $cmd)

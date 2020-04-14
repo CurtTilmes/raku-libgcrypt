@@ -23,12 +23,30 @@ test-alpine:
 	  jjmerelo/raku-test \
 	  -c "apk add --update --no-cache libgcrypt && zef install --/test --deps-only --test-depends . && zef -v test ."
 
+alpine-env:
+	docker run --rm -it \
+	  -e RELEASE_TESTING=1 \
+	  -e PERL6LIB=/test \
+	  -v $(CWD):/test \
+          --entrypoint="/bin/sh" \
+	  jjmerelo/raku-test \
+	  -c "apk add --update --no-cache libgcrypt && zef install --/test --deps-only --test-depends . && /bin/sh"
+
 test-debian:
-	docker run --rm -t  \
+	docker run --rm -t \
 	  -e RELEASE_TESTING=1 \
 	  -v $(CWD):/test -w /test \
           --entrypoint="/bin/sh" \
 	  jjmerelo/rakudo-nostar \
 	  -c "zef install --/test --deps-only --test-depends . && zef -v test ."
+
+debian-env:
+	docker run --rm -it \
+	  -e RELEASE_TESTING=1 \
+	  -e PERL6LIB=/test \
+	  -v $(CWD):/test -w /test \
+          --entrypoint="/bin/sh" \
+	  jjmerelo/rakudo-nostar \
+	  -c "zef install --/test --deps-only --test-depends . && /bin/bash"
 
 test: test-alpine test-debian

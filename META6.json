@@ -9,7 +9,10 @@
     "license"        : "Artistic-2.0",
     "build-depends"  : [ ],
     "test-depends"   : [ "Test", "Test::When" ],
-    "depends"        : [ "NativeCall", "NativeLibs" ],
+    "depends"        : [
+        "NativeCall",
+        "NativeLibs:ver<0.0.7>:auth<github:salortiz>"
+    ],
     "authors"        : [ "Curt Tilmes <curt@tilmes.org>" ],
     "provides"       : {
         "Gcrypt"               : "lib/Gcrypt.rakumod",
