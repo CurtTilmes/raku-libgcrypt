@@ -212,6 +212,7 @@ Many distributions already have libgcrypt installed, but if not, get it
 first:
 * For debian or ubuntu: `apt install libgcrypt20`
 * For alpine: `apk add libgcrypt`
+* For CentOS: `yum install libgcrypt`
 
 Then `zef install Gcrypt`
 
