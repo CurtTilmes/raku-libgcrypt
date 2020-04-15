@@ -11,7 +11,8 @@
     "test-depends"   : [ "Test", "Test::When" ],
     "depends"        : [
         "NativeCall",
-        "NativeLibs:ver<0.0.7>:auth<github:salortiz>"
+        "NativeLibs:ver<0.0.7>:auth<github:salortiz>",
+        "gcrypt:from<native>"
     ],
     "authors"        : [ "Curt Tilmes <curt@tilmes.org>" ],
     "provides"       : {
