@@ -47,12 +47,10 @@ multi submethod BUILD(Str:D :$algorithm, |opts)
 
 multi submethod BUILD(Int:D :$algorithm,
                       :$key,
-                      Bool :$secure,
                       Bool :$hmac,
                       Bool :$bugemu1)
 {
-    my uint32 $flags = ($secure  ?? GCRY_MD_FLAG_SECURE  !! 0)
-                    +| ($hmac    ?? GCRY_MD_FLAG_HMAC    !! 0)
+    my uint32 $flags = ($hmac    ?? GCRY_MD_FLAG_HMAC    !! 0)
                     +| ($bugemu1 ?? GCRY_MD_FLAG_BUGEMU1 !! 0);
 
     $!handle .= new;
@@ -64,8 +62,6 @@ multi submethod BUILD(Int:D :$algorithm,
     Gcrypt.check($!handle.setkey($_)) with $key;
 }
 
-method is-secure() { $!handle.is-secure() != 0 }
-
 method clone(--> Gcrypt::Hash)
 {
     my Gcrypt::HashHandle $handle .= new;
@@ -73,17 +69,15 @@ method clone(--> Gcrypt::Hash)
     self.bless(:$handle, :$!length)
 }
 
-method close()
+submethod DESTROY()
 {
     .close with $!handle;
     $!handle = Nil;
 }
 
-submethod DESTROY() { self.close }
+method algorithm(--> Gcrypt::MD) { Gcrypt::MD($!handle.algorithm) }
 
-method algorithm() { Gcrypt::Ciphers($!handle.algorithm) }
-
-method name() { gcry_md_algo_name($!handle.algorithm) }
+method name(--> Str:D) { gcry_md_algo_name($!handle.algorithm) }
 
 multi method write(Any:U)
 {
@@ -100,7 +94,7 @@ multi method write(Str:D $str --> Gcrypt::Hash)
     samewith $str.encode
 }
 
-method digest(Int $bytes = 0 --> Blob)
+method digest(Int $bytes = 0 --> Blob:D)
 {
     if $!length == 0
     {
@@ -117,12 +111,85 @@ method digest(Int $bytes = 0 --> Blob)
     }
 }
 
-method hex(|opts --> Str)
+method hex(|opts --> Str:D)
 {
     $.digest(|opts)».fmt("%02x").join
 }
 
-method dec(|opts --> Int)
+method dec(|opts --> Int:D)
 {
     $.hex(|opts).parse-base(16)
 }
+
+=begin pod
+
+=head1 NAME
+
+Gcrypt::Hash - Message Digest / Hashing
+
+=head1 SYNOPSIS
+
+  use Gcrypt::Hash;
+
+  say Gcrypt::Hash.available('MD5');   # True if algorithm ok
+  my $obj = Gcrypt::Hash.new(algorithm => 'MD5');
+  $obj.write("some data");             # Write Str
+  $obj.write(buf8.new(27, 52));        # Write BLob
+  say $obj.digest;                     # Blob
+  say $obj.hex;                        # hex digit string
+  say $obj.dec;                        # Decimal
+
+  $obj.reset;                          # Reuse for another set of data
+  my $another = $obj.clone;            # Another copy of same object
+  say $obj.algorithm;                  # Algorithm enum
+  say $obj.name;                       # Name of algorithm
+
+=head1 DESCRIPTION
+
+Message digest computation.
+
+=head2 METHODS
+
+=item method B<available>($algorithm --> Bool:D)
+
+I<$algorithm> can be a C<Gcrypt::MD> enumeration from C<Gcrypt::Constants>
+or a string name of an algorithm.
+
+Check to see if if the algorithm is valid and available for use.
+
+=item method B<new>(:$algorithm)
+
+I<$algorithm can be a C<Gcrypt::MD> enumeration from C<Gcrypt::Constants>
+or a string name of an algorithm.
+
+=item method B<algorithm>(--> Gcrypt::MD)
+
+Returns the C<Gcrypt::MD> enumeration for the algorithm.
+
+=item method B<name>(--> Str:D)
+
+Returns the name of the algorithm.
+
+=item method B<write>($data --> Gcrypt::Hash)
+
+I<$data> can be a C<Blob> or a C<Str> with data to add to the hash
+calculation.  Returns the object for convenience.
+
+=item method B<digest>(Int $bytes = 0 --> Blob:D)
+
+Returns the digest/hash of the data as a C<Blob>.  Some algorithms allow
+you to specify an optional I<$bytes> number of bytes to return.
+
+=item method B<hex>(Int $bytes = 0 --> Str:D)
+
+Returns the digest/hash of the data as a string of hex digits.
+
+=item method B<dec>(Int $bytes = 0 --> Int:D)
+
+Returns the digest/hash of the data as an integer.
+
+=item submethod B<DESTROY>()
+
+Release the resources for the Hash, called automatically.
+
+=end pod
