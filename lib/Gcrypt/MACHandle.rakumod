@@ -12,7 +12,7 @@ method setkey(Blob, size_t --> int32)
 method setiv(Blob, size_t --> int32)
     is native(LIBGCRYPT) is symbol('gcry_mac_setiv') {}
 
-method control(int32, Blob, size_t)
+method control(int32, Blob, size_t --> int32)
     is native(LIBGCRYPT) is symbol('gcry_mac_ctl') {}
 
 method write(Blob, size_t --> int32)
