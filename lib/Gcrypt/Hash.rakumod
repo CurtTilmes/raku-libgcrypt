@@ -94,21 +94,24 @@ multi method write(Str:D $str --> Gcrypt::Hash)
     samewith $str.encode
 }
 
-method digest(Int $bytes = 0 --> Blob:D)
+method digest(Int $bytes = 0, Bool :$reset --> Blob:D)
 {
+    my $buf;
     if $!length == 0
     {
         die X::Gcrypt::ExtendedOutput.new(algorithm => $.algorithm)
             unless $bytes > 0;
 
-        my $buf = buf8.allocate($bytes);
+        $buf = buf8.allocate($bytes);
         Gcrypt.check: $!handle.extract(0, $buf, $bytes);
-        $buf
     }
     else
     {
-        Blob.new: ($!handle.read(0) // die X::Gcrypt::Invalid.new)[^$.length]
+        $buf = Blob.new: ($!handle.read(0)
+                          // die X::Gcrypt::Invalid.new)[^$.length];
     }
+    $!handle.reset() if $reset;
+    $buf
 }
 
 method hex(|opts --> Str:D)
@@ -135,9 +138,11 @@ Gcrypt::Hash - Message Digest / Hashing
   my $obj = Gcrypt::Hash.new(algorithm => 'MD5');
   $obj.write("some data");             # Write Str
   $obj.write(buf8.new(27, 52));        # Write BLob
+
   say $obj.digest;                     # Blob
   say $obj.hex;                        # hex digit string
   say $obj.dec;                        # Decimal
+  say $obj.hex(:reset);                # return hex, and also reset
 
   $obj.reset;                          # Reuse for another set of data
   my $another = $obj.clone;            # Another copy of same object
@@ -175,18 +180,24 @@ Returns the name of the algorithm.
 I<$data> can be a C<Blob> or a C<Str> with data to add to the hash
 calculation.  Returns the object for convenience.
 
-=item method B<digest>(Int $bytes = 0 --> Blob:D)
+=item method B<digest>(Int $bytes = 0, Bool :$reset --> Blob:D)
 
 Returns the digest/hash of the data as a C<Blob>.  Some algorithms allow
 you to specify an optional I<$bytes> number of bytes to return.
 
-=item method B<hex>(Int $bytes = 0 --> Str:D)
+If I<$reset> is included, reset the object for new data.
+
+=item method B<hex>(Int $bytes = 0, Bool :$reset --> Str:D)
 
 Returns the digest/hash of the data as a string of hex digits.
 
-=item method B<dec>(Int $bytes = 0 --> Int:D)
+If I<$reset> is included, reset the object for new data.
+
+=item method B<dec>(Int $bytes = 0, Bool :$reset --> Int:D)
 
 Returns the digest/hash of the data as an integer.
+
+If I<$reset> is included, reset the object for new data.
 
 =item submethod B<DESTROY>()
 

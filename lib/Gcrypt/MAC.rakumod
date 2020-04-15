@@ -58,7 +58,7 @@ multi submethod BUILD(Int:D :$!algorithm,
     self.setiv($_) with $iv;
 }
 
-method reset()
+method reset(--> Gcrypt::MAC)
 {
     Gcrypt.check: $!handle.control(GCRYCTL_RESET, Blob, 0);
     self
@@ -119,16 +119,17 @@ method verify(Blob:D $buf --> Bool)
     $!handle.verify($buf, $buf.bytes) != GPG_ERR_CHECKSUM
 }
 
-method MAC(--> Blob)
+method MAC(Bool :$reset --> Blob)
 {
     my $buf = buf8.allocate($!maclen);
     my size_t $length = $!maclen;
     Gcrypt.check: $!handle.read($buf, $length);
     $buf.reallocate($length) if $length != $!maclen;
+    self.reset() if $reset;
     $buf
 }
 
-method hex(--> Str)
+method hex(|opts --> Str)
 {
-    $.MAC».fmt("%02x").join
+    $.MAC(|opts)».fmt("%02x").join
 }

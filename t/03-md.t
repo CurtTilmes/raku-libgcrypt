@@ -46,7 +46,7 @@ for @hashes -> (:key($algorithm), :value($hash))
 {
     subtest $algorithm,
     {
-        plan 3;
+        plan 4;
 
         if Gcrypt::Hash.available($algorithm)
         {
@@ -55,11 +55,13 @@ for @hashes -> (:key($algorithm), :value($hash))
 
             isa-ok $obj.write($text), 'Gcrypt::Hash', "Write text $obj.name()";
 
-            is $obj.hex(32), $hash, "Check hash $obj.name()";
+            is $obj.hex(32, :reset), $hash, "Check hash $obj.name()";
+
+            is $obj.write($text).hex(32), $hash, "Recheck hash after reset";
         }
         else
         {
-            skip('Old version of libgcrypt, skip BLAKE algorithms', 3);
+            skip('Old version of libgcrypt, skip BLAKE algorithms', 4);
         }
     }
 }

@@ -49,13 +49,15 @@ for @macs -> (:key($algorithm), :value($hash))
 {
     subtest $algorithm,
     {
-        plan 3;
+        plan 4;
 
         isa-ok my $obj = Gcrypt::MAC.new(:$algorithm, :$key),
             'Gcrypt::MAC', "Create object for $obj.name()";
 
         isa-ok $obj.write($text), 'Gcrypt::MAC', "Write text $obj.name()";
 
-        is $obj.hex, $hash, "Check has $obj.name()";
+        is $obj.hex(:reset), $hash, "Check hash $obj.name()";
+
+        is $obj.write($text).hex, $hash, "Check again after reset $obj.name()";
     }
 }

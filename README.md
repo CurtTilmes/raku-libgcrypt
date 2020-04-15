@@ -53,10 +53,13 @@ say MD5(slurp).hex;            # print md5sum of STDIN
 
 my $obj = MD5;                 # Get a new object
 $obj.write("$_\n") for lines;  # Incremental calculation
+
 say $obj.digest;               # Blob
 say $obj.hex;                  # Hex string
 say $obj.dec;                  # Decimal
-$obj.reset;                    # Reuse object on another message
+say $obj.hex(:reset);          # Each of these can take :reset to reset the obj
+
+$obj.reset;                    # or call reset to Reuse object on another message
 ```
 
 Available Hashes:
@@ -96,7 +99,8 @@ my $obj = HMAC_MD5('mykey');        # Create object
 $obj.write('my message');           # Add data
 say $obj.MAC;                       # Blob
 say $obj.hex;                       # Hex string
-$obj.reset;                         # Reuse object on another message
+say $obj.hex(:reset);               # Can also pass :reset to MAC or hex
+$obj.reset;                         # or reset to reuse object on another message
 ```
 
 Key is truncated or 0 extended to the size for the algorithm.
