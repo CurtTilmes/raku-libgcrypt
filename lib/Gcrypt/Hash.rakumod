@@ -159,7 +159,7 @@ Check to see if if the algorithm is valid and available for use.
 
 =item method B<new>(:$algorithm)
 
-I<$algorithm can be a C<Gcrypt::MD> enumeration from C<Gcrypt::Constants>
+I<$algorithm> can be a C<Gcrypt::MD> enumeration from C<Gcrypt::Constants>
 or a string name of an algorithm.
 
 =item method B<algorithm>(--> Gcrypt::MD)
