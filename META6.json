@@ -3,7 +3,7 @@
     "perl"           : "6.*",
     "name"           : "Gcrypt",
     "api"            : "1",
-    "version"        : "0.6",
+    "version"        : "0.7",
     "auth"           : "github:CurtTilmes",
     "description"    : "Raku Bindings for GNU libgcrypt",
     "license"        : "Artistic-2.0",
@@ -11,7 +11,7 @@
     "test-depends"   : [ "Test", "Test::When" ],
     "depends"        : [
         "NativeCall",
-        "NativeLibs:ver<0.0.7>:auth<github:salortiz>",
+        "NativeLibs:ver<0.0.7+>:auth<github:salortiz>",
         "gcrypt:from<native>"
     ],
     "authors"        : [ "Curt Tilmes <curt@tilmes.org>" ],

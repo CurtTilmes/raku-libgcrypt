@@ -1,5 +1,5 @@
 use NativeCall;
-use NativeLibs:ver<0.0.7>:auth<github:salortiz>;
+use NativeLibs:ver<0.0.7+>:auth<github:salortiz>;
 use Gcrypt::Constants;
 
 sub LIBGCRYPT is export
